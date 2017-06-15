@@ -7,3 +7,6 @@
 ì¬ÒF¬“cC”V
 
 MySQL
+1.mysql Ver 15.1 Distrib 10.1.22-MariaDB, for Win32 (AMD64)
+2.10.1.22-MariaDB
+3.https://dev.mysql.com/doc/refman/5.6/ja/
