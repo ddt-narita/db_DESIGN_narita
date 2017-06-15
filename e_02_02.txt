@@ -1,0 +1,15 @@
+演習02-02
+ハードウェアリソースの情報を取得するためのコマンドをOS別にしらべて整理
+作成日：6月15日
+作成者：成田修之
+
+Windows
+コマンドプロンプトにてsysteminfoでシステム要件
+fsutil volume diskfree c:　でデスクの空き領域が表示
+
+
+mac
+system_profilerコマンドを使う
+
+Linux
+dmidecodeコマンドを使う
