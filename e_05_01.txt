@@ -1,0 +1,117 @@
+‰‰K05-01
+³‹K‰»‚³‚ê‚½5‚Â‚Ìƒe[ƒuƒ‹‚©‚ç—vŒ‚ð–ž‚½‚·Œ‹‰Ê‚ð“¾‚é‚½‚ß‚ÌSQL•¶‚ðl‚¦‚é
+ì¬“úF6ŒŽ16“ú
+ì¬ŽÒF¬“cC”V
+
+SQL•¶1,¤•i•ª—Þ‚²‚Æ‚Ì¤•i”AŒ‹‰Ê‚É‚Í•ª—Þ–¼‚ðŠÜ‚Þ‚à‚Ì‚Æ‚·‚é
+SQL•¶2,ŽxŽÐ/Žx“X•Ê‚ÌŽæ‚èˆµ‚¢¤•i‚Ìˆê——BŒ‹‰Ê‚É‚ÍŽxŽÐ–¼AŽx“X–¼A¤•i–¼‚ðŠÜ‚Þ
+SQL•¶3,‚à‚Á‚Æ‚àŽæˆµ¤•i”‚ª‘½‚¢Žx“X‚ÌŽx“XƒR[ƒh‚Æ¤•i”
+
+sql1:
+
+SELECT
+	sb.shohin_bunrui_cd,
+	COUNT(*),
+	sb.shohin_bunrui_mei
+FROM
+	shohinbunrui AS sb
+INNER JOIN
+	shohin AS s
+ON
+	s.shohin_bunrui_cd = sb.shohin_bunrui_cd
+GROUP BY
+	sb.shohin_bunrui_cd,
+	sb.shohin_bunrui_mei
+;
+
+ shohin_bunrui_cd | count | shohin_bunrui_mei
+------------------+-------+-------------------
+ C1               |     4 | …ô—p•i
+ C4               |     1 | “ú—pŽG‰Ý
+ C2               |     2 | HŠí
+ C3               |     1 | ‘Ð
+
+
+sql2:
+
+SELECT
+	ss.shisha_mei,
+	st.shiten_mei,
+	sh.shohin_mei
+FROM
+	shisha AS ss
+INNER JOIN
+	shiten AS st
+ON
+	ss.shisha_cd = st.shisha_cd
+	
+	INNER JOIN
+		shitenshohin AS stsh
+	ON
+		st.shisha_cd = stsh.shisha_cd
+		AND
+		st.shiten_cd = stsh.shiten_cd
+		
+		INNER JOIN
+			shohin AS sh
+		ON
+			stsh.shohin_cd = sh.shohin_cd
+;
+
+ shisha_mei | shiten_mei | shohin_mei
+------------+------------+------------
+ “Œ‹ž       | a’J       | ÎŒ²
+ “Œ‹ž       | a’J       | ƒ^ƒIƒ‹
+ “Œ‹ž       | a’J       | ƒnƒuƒ‰ƒV
+ “Œ‹ž       | ”ªdF     | ƒ^ƒIƒ‹
+ “Œ‹ž       | ”ªdF     | ƒnƒuƒ‰ƒV
+ “Œ‹ž       | ”ªdF     | ƒRƒbƒv
+ “Œ‹ž       | ”ªdF     | ”¢
+ “Œ‹ž       | ”ªdF     | ƒXƒv[ƒ“
+ ‘åã       | ä         | ÎŒ²
+ ‘åã       | ä         | ƒ^ƒIƒ‹
+ ‘åã       | –L’†       | ŽGŽ
+ ‘åã       | –L’†       | ’ÜØ‚è
+
+
+
+sql 3:
+SELECT
+	ST.shisha_cd,
+	ST.shiten_cd,
+	COUNT(*) AS max
+FROM 
+	Shiten ST INNER JOIN ShitenShohin SS
+ON 
+	ST.shisha_cd = SS.shisha_cd
+	AND 
+	ST.shiten_cd = SS.shiten_cd
+GROUP BY
+	ST.shisha_cd, ST.shiten_cd
+HAVING 
+	COUNT(*)
+	>=
+	(
+	SELECT 
+		MAX(count)
+	FROM 
+		( 
+		SELECT 
+			ST.shisha_cd,
+			ST.shiten_cd,
+			COUNT(*) AS count
+		FROM
+			Shiten ST INNER JOIN ShitenShohin SS
+		ON 
+			ST.shisha_cd = SS.shisha_cd
+			AND 
+			ST.shiten_cd = SS.shiten_cd
+		GROUP BY 
+			ST.shisha_cd, ST.shiten_cd
+		) AS tmp
+	)
+;
+
+ shisha_cd | shiten_cd | max
+-----------+-----------+-----
+ 001       | 02        |   5
